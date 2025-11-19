@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class StudentController extends Controller
 {
+
+    public function index(){
+        $students = student::all();
+        return view('component.student_list',compact('students'));
+    }
     public function create(){
         return view('create_student');
     }
@@ -22,7 +27,7 @@ class StudentController extends Controller
                 'address'=>$request->Address,
 
             ]);
-            return redirect()->back();
+            return redirect()->route('student.list');
 
         }
         catch (\Exception $exception)

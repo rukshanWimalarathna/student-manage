@@ -12,7 +12,7 @@ class Student extends Model
         'reg_no',
         'name',
         'email',
-        'password',
+
         'phone',
         'date_of_birth',
         'address',
