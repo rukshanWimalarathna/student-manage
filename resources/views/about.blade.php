@@ -1,11 +1,11 @@
-@include('component.head')
-@include('component.navbar')
-<div class="container">
-    <div class="row">
-        <div class="col-12">
-            <h2>About Us</h2>
-        </div>
-    </div>
-</div>
+@extends('app')
+@push('title')
+    About us
+@endpush
+@push('nav-brand')
+    Sri Lanka
+@endpush
+@section('content')
+    <h1>About Sri Lanka</h1>
 
-@include('component.script')
+@endsection()

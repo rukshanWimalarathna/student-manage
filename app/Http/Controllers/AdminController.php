@@ -7,9 +7,9 @@ use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
-    public function dashboard(): Factory|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    public function home(): Factory|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        return view('dashboard');
+        return view('home');
 
     }
     public function about()
