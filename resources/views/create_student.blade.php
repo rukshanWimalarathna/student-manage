@@ -1,89 +1,85 @@
 @extends('app')
 @push('title')
-Student Register
+    Student Register
 @endpush
-@push('nav-brand')
-    LMS
+@push('page_header_title')
+    Student Register
 @endpush
 
-@push('css')
-    <style>
-
-    </style>
-@endpush
 @section('content')
-    <div class="container-fluid mt-5">
-         <div class="row">
-            <div class="col-12">
-                 <h1 class="mt-5">Student Register Form</h1>
-            </div>
-        <div class="col-6">
-            <form action="{{route('student.store')}}" method="post">
-                @csrf
-                <div class="form-group">
-                    <label for="exampleInputEmail1">Register No </label>
-                    <input type="text" name="reg_no" class="form-control"  placeholder="Register NO" required>
-                </div>
-                <div class="form-group">
-                    <label for="exampleInputEmail1">Full Name </label>
-                    <input type="text" name="name" class="form-control"  placeholder="name" required>
-                </div>
-                <div class="form-group">
-                    <label for="exampleInputEmail1">E-mail</label>
-                    <input type="email" name="email" class="form-control"  placeholder="Email" required>
-                </div>
-                <div class="form-group">
-                    <label for="exampleInputPassword1">Phone No</label>
-                    <input type="text" name="Phoneno" class="form-control"  placeholder="Phone No" required>
-                </div>
-                <div class="form-group">
-                    <label for="exampleInputPassword1">DOB</label>
-                    <input type="date" name="Birthday" class="form-control"  placeholder="Birthday" required>
-                </div>
-                <div class="form-group">
-                    <label for="exampleInputPassword1">Address</label>
-                    <input type="text" name="Address" class="form-control"  placeholder="Address" required>
-                </div>
-
-
-                <button type="submit" class="btn btn-success mt-3  w-100">Register</button>
-            </form>
+    <!--begin::Row-->
+    <div class="row">
+        <div class="col-sm-6">
+            <h3 class="mb-0">
+                @stack('page_header_title')
+            </h3>
         </div>
-             <div class="col-6">
-                 <table class="table">
-                     <thead>
-                     <tr>
-                         <th scope="col">#</th>
-                         <th scope="col">Reg No</th>
-                         <th scope="col">Full Name</th>
-                         <th scope="col">DOB</th>
-                         <th scope="col">Email</th>
-                         <th scope="col">Phone No</th>
-                     </tr>
-                     </thead>
-                     <tbody>
-                     <tr>
-                         <th scope="row">1</th>
-                         <td>Mark</td>
-                         <td>Otto</td>
-                         <td>1996.12.10</td>
-                         <th scope="row">ruks@gmail.com</th>
-                         <td>0124564751</td>
-
-
-                     </tr>
-
-
-                     </tbody>
-                 </table>
-             </div>
+        <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-end">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Student Register</li>
+            </ol>
+        </div>
     </div>
+    <!--end::Row-->
+
+    <!--begin::App Content-->
+    <div class="app-content">
+        <!--begin::Container-->
+        <div class="container-fluid">
+            <div class="card shadow p-4 bg-secondary-subtle">
+                <h3 class="text-center mb-4">Student Registration Form</h3>
+
+                <form id="studentForm">
+                    <!-- Row 1 -->
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>Register Number</label>
+                            <input type="text" id="regNo" class="form-control" placeholder="Enter Register Number">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label>Name</label>
+                            <input type="text" id="name" class="form-control" placeholder="Enter Name">
+                        </div>
+                    </div>
+
+                    <!-- Row 2 -->
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>Address</label>
+                            <input type="text" id="address" class="form-control" placeholder="Enter Address">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label>Date of Birth</label>
+                            <input type="date" id="dob" class="form-control">
+                        </div>
+                    </div>
+
+                    <!-- Row 3 -->
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>Age</label>
+                            <input type="number" id="age" class="form-control" placeholder="Enter Age">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label>Weight</label>
+                            <input type="number" id="weight" class="form-control" placeholder="Enter Weight">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 mt-3">Submit</button>
+                </form>
+            </div>
+        </div>
+        <!--end::Container-->
     </div>
+    <!--end::App Content-->
 
-
-@endsection()
-@push('script')
-    <script>
-
-    </script>
-@endpush
+    <!-- Add your existing scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/js/validation.js"></script>
+@endsection
