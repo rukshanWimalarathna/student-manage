@@ -60,36 +60,24 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="./generate/theme.html" class="nav-link">
-                        <i class="nav-icon bi bi-palette"></i>
-                        <p>Teacher</p>
-                    </a>
-                </li>
-                <li class="nav-item">
                     <a href="#" class="nav-link">
-                        <i class="nav-icon bi bi-box-seam-fill"></i>
+                        <i class="nav-icon bi bi-person-badge-fill"></i>
                         <p>
-                            Widgets
+                            Teacher
                             <i class="nav-arrow bi bi-chevron-right"></i>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="./widgets/small-box.html" class="nav-link">
-                                <i class="nav-icon bi bi-circle"></i>
-                                <p>Small Box</p>
+                            <a href="{{ route('teacher.register') }}" class="nav-link">
+                                <i class="nav-icon bi bi-person-plus"></i>
+                                <p>Teacher Register</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="./widgets/info-box.html" class="nav-link">
-                                <i class="nav-icon bi bi-circle"></i>
-                                <p>info Box</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="./widgets/cards.html" class="nav-link">
-                                <i class="nav-icon bi bi-circle"></i>
-                                <p>Cards</p>
+                            <a href="{{ route('teacher.list') }}" class="nav-link">
+                                <i class="nav-icon bi bi-list-ul"></i>
+                                <p>Teacher List</p>
                             </a>
                         </li>
                     </ul>
