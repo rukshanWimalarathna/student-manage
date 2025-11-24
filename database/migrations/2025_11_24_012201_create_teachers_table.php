@@ -20,7 +20,8 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->string('subject')->nullable();
             $table->string('gender')->nullable();
-            $table->string('nic')->unique();
+            $table->string('nic_no')->unique();
+            $table->string('address')->nullable();
 
             $table->timestamps();
         });
