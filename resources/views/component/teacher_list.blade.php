@@ -91,13 +91,15 @@
                             @endforeach
                             </tbody>
                         </table>
-                    </div>
+
+                        
                 </div>
             </div>
         </div>
         <!--end::Container-->
     </div>
     <!--end::App Content-->
+
 
     <!-- Update Teacher Modal -->
     <div class="modal fade" id="updateTeacherModal" tabindex="-1" aria-labelledby="updateTeacherModalLabel" aria-hidden="true">
@@ -107,7 +109,7 @@
                     <h5 class="modal-title" id="updateTeacherModalLabel">Update Teacher</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form id="updateTeacherForm" method="POST">
+                <form id="updateTeacherForm" method="POST" action="">
                     @csrf
                     <div class="modal-body">
                         <div class="row">
@@ -164,76 +166,57 @@
         </div>
     </div>
 @endsection
-
 @push('script')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // SweetAlert for delete confirmation
-            const deleteButtons = document.querySelectorAll('.btn-delete');
-            deleteButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const teacherId = this.getAttribute('data-id');
+            console.log('Update modal script loaded');
+
+            // UPDATE BUTTON CLICK EVENT
+            document.querySelectorAll('.btn-update-teacher').forEach(btn => {
+                btn.addEventListener('click', function () {
+
+                    const teacherId = this.dataset.id;
+
+                    // Fill modal inputs
+                    document.querySelector('input[name="teacher_id"]').value = this.dataset.teacher_id;
+                    document.querySelector('input[name="name"]').value = this.dataset.name;
+                    document.querySelector('input[name="email"]').value = this.dataset.email;
+                    document.querySelector('input[name="phone"]').value = this.dataset.phone;
+                    document.querySelector('input[name="subject"]').value = this.dataset.subject;
+                    document.querySelector('select[name="gender"]').value = this.dataset.gender;
+                    document.querySelector('input[name="nic_no"]').value = this.dataset.nic_no;
+                    document.querySelector('input[name="address"]').value = this.dataset.address;
+
+                    // Update form action
+                    document.getElementById('updateTeacherForm').action =
+                        "{{ url('/teacher/update') }}/" + teacherId;
+
+                    // Show modal
+                    const modal = new bootstrap.Modal(document.getElementById('updateTeacherModal'));
+                    modal.show();
+                });
+            });
+
+            // DELETE BUTTON
+            document.querySelectorAll('.btn-delete').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const id = this.dataset.id;
+
                     Swal.fire({
                         title: 'Are you sure?',
-                        text: "You won't be able to revert this!",
+                        text: 'This action cannot be undone!',
                         icon: 'warning',
                         showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes, delete it!'
+                        confirmButtonText: 'Yes, Delete',
+                        cancelButtonText: 'Cancel'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            document.getElementById('delete-form-' + teacherId).submit();
+                            document.getElementById('delete-form-' + id).submit();
                         }
                     });
                 });
             });
 
-            // Update Teacher Modal
-            const updateButtons = document.querySelectorAll('.btn-update-teacher');
-            const updateModal = new bootstrap.Modal(document.getElementById('updateTeacherModal'));
-            const updateForm = document.getElementById('updateTeacherForm');
-
-            updateButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const teacherId = this.getAttribute('data-id');
-                    const teacherIdValue = this.getAttribute('data-teacher_id');
-                    const name = this.getAttribute('data-name');
-                    const email = this.getAttribute('data-email');
-                    const phone = this.getAttribute('data-phone');
-                    const subject = this.getAttribute('data-subject');
-                    const gender = this.getAttribute('data-gender');
-                    const nicNo = this.getAttribute('data-nic_no');
-                    const address = this.getAttribute('data-address');
-
-                    // Set form action
-                    updateForm.action = `/teacher/update/${teacherId}`;
-
-                    // Fill form with current data
-                    updateForm.querySelector('input[name="teacher_id"]').value = teacherIdValue;
-                    updateForm.querySelector('input[name="name"]').value = name;
-                    updateForm.querySelector('input[name="email"]').value = email;
-                    updateForm.querySelector('input[name="phone"]').value = phone;
-                    updateForm.querySelector('input[name="subject"]').value = subject;
-                    updateForm.querySelector('select[name="gender"]').value = gender;
-                    updateForm.querySelector('input[name="nic_no"]').value = nicNo;
-                    updateForm.querySelector('input[name="address"]').value = address;
-
-                    // Show modal
-                    updateModal.show();
-                });
-            });
-
-            // SweetAlert for success messages
-            @if(session('success'))
-            Swal.fire({
-                icon: 'success',
-                title: 'Success!',
-                text: '{{ session('success') }}',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK'
-            });
-            @endif
         });
     </script>
 @endpush
