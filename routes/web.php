@@ -1,7 +1,11 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
+use App\Models\Student;
+use App\Models\Teacher;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -10,80 +14,57 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
-// Dashboard
-use App\Models\Student;
-use App\Models\Teacher;
+// Authentication Routes
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login']);
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
+// Public Routes
+Route::get('/', function () {
+    return redirect('/login');
+});
 
+// Protected Routes - Require Authentication
+Route::middleware(['auth'])->group(function () {
 
-Route::get('/', function() {
-    // Basic counts
-    $studentCount = Student::count();
-    $teacherCount = Teacher::count();
-    $totalUsers = $studentCount + $teacherCount;
+    // Role-based Dashboard Routes
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/admin/dashboard', [DashboardController::class, 'adminDashboard'])->name('admin.dashboard')->middleware('admin');
+    Route::get('/teacher/dashboard', [DashboardController::class, 'teacherDashboard'])->name('teacher.dashboard')->middleware('teacher');
+    Route::get('/student/dashboard', [DashboardController::class, 'studentDashboard'])->name('student.dashboard')->middleware('student');
 
-    // Student Age Distribution Calculation
-    $students = Student::all();
-    $ageUnder18 = 0;
-    $age18to25 = 0;
-    $age26to35 = 0;
-    $ageOver35 = 0;
+    // Admin-only Routes
+    Route::middleware(['admin'])->group(function () {
+        // Student Routes
+        Route::get('/student/register', function() {
+            return view('student_register_form');
+        })->name('student.register');
 
-    foreach ($students as $student) {
-        $age = \Carbon\Carbon::parse($student->date_of_birth)->age;
+        Route::get('/student/list', [StudentController::class, 'index'])->name('student.list');
+        Route::post('/student/save', [StudentController::class, 'store'])->name('student.store');
+        Route::get('/student/edit/{id}', [StudentController::class, 'edit'])->name('student.edit');
+        Route::post('/student/update/{id}', [StudentController::class, 'update'])->name('student.update');
+        Route::delete('/student/delete/{id}', [StudentController::class, 'destroy'])->name('student.delete');
 
-        if ($age < 18) {
-            $ageUnder18++;
-        } elseif ($age >= 18 && $age <= 25) {
-            $age18to25++;
-        } elseif ($age >= 26 && $age <= 35) {
-            $age26to35++;
-        } else {
-            $ageOver35++;
-        }
-    }
+        // Teacher Routes
+        Route::get('/teacher/register', function() {
+            return view('teacher_register_form');
+        })->name('teacher.register');
 
-    // Teacher Subject Distribution Calculation
-    $teachers = Teacher::all();
-    $subjectCounts = [];
+        Route::get('/teacher/list', [TeacherController::class, 'index'])->name('teacher.list');
+        Route::post('/teacher/save', [TeacherController::class, 'store'])->name('teacher.store');
+        Route::get('/teacher/edit/{id}', [TeacherController::class, 'edit'])->name('teacher.edit');
+        Route::post('/teacher/update/{id}', [TeacherController::class, 'update'])->name('teacher.update');
+        Route::delete('/teacher/delete/{id}', [TeacherController::class, 'destroy'])->name('teacher.delete');
+    });
 
-    foreach ($teachers as $teacher) {
-        $subject = $teacher->subject ?: 'Other';
-        if (!isset($subjectCounts[$subject])) {
-            $subjectCounts[$subject] = 0;
-        }
-        $subjectCounts[$subject]++;
-    }
+    // Teacher-only Routes
+    Route::middleware(['teacher'])->group(function () {
+        // Teacher specific routes will be added later
+    });
 
-    // Get top 4 subjects + Others
-    arsort($subjectCounts);
-    $topSubjects = array_slice($subjectCounts, 0, 4, true);
-    $otherCount = $teacherCount - array_sum($topSubjects);
-
-    return view('dashboard', compact(
-        'studentCount', 'teacherCount', 'totalUsers',
-        'ageUnder18', 'age18to25', 'age26to35', 'ageOver35',
-        'topSubjects', 'otherCount'
-    ));
-})->name('dashboard');
-
-
-// Student Routes
-Route::get('/register', function() {return view('student_register_form');})->name('student.register');
-
-Route::get('/create', [StudentController::class, 'create'])->name('student.create');
-Route::get('/list', [StudentController::class, 'index'])->name('student.list');
-Route::post('/save', [StudentController::class, 'store'])->name('student.store');
-Route::get('/student/edit/{id}', [StudentController::class, 'edit'])->name('student.edit');
-Route::post('/student/update/{id}', [StudentController::class, 'update'])->name('student.update');
-Route::delete('/student/delete/{id}', [StudentController::class, 'destroy'])->name('student.delete');
-
-// Teacher Routes
-Route::get('/teacher/register', function() {return view('teacher_register_form');})->name('teacher.register');
-
-Route::get('/teacher/create', [TeacherController::class, 'create'])->name('teacher.create');
-Route::get('/teacher/list', [TeacherController::class, 'index'])->name('teacher.list');
-Route::post('/teacher/save', [TeacherController::class, 'store'])->name('teacher.store');
-Route::get('/teacher/edit/{id}', [TeacherController::class, 'edit'])->name('teacher.edit');
-Route::post('/teacher/update/{id}', [TeacherController::class, 'update'])->name('teacher.update');
-Route::delete('/teacher/delete/{id}', [TeacherController::class, 'destroy'])->name('teacher.delete');
+    // Student-only Routes
+    Route::middleware(['student'])->group(function () {
+        // Student specific routes will be added later
+    });
+});
